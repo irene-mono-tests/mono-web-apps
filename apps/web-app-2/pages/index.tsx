@@ -30,8 +30,6 @@ export function Index() {
 
             <p>Domain: {process.env.NX_DOMAIN_NAME}</p>
             <p>Domain 2: {process.env.NEXT_PUBLIC_DEPLOY_URL}</p>
-
-            <p suppressHydrationWarning={true}>Domain: {process.env.TEST}</p>
           </div>
 
           <div id="hero" className="rounded">

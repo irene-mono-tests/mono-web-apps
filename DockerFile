@@ -1,0 +1,50 @@
+FROM node:16-alpine AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+
+# Rebuild the source code only when needed
+FROM node:16-alpine AS builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN yarn nx run-many --target=build --all=true --verbose=true
+
+# Production image, copy all the files and run next
+FROM node:16-alpine AS runner
+
+
+FROM builder AS deploy-app-001
+
+WORKDIR /app
+
+ARG CACHEBUST=1
+ENV NODE_ENV production
+
+COPY --from=builder /app/dist/apps/web-app-1/.next/standalone ./app/web-app-1/standalone
+
+COPY --from=builder /app/dist/apps/web-app-1/.next/static ./app/web-app-1/standalone/dist/apps/web-app-1/.next/static
+
+COPY --from=builder /app/dist/apps/web-app-1/public ./app/web-app-1/standalone/dist/apps/public
+
+## server.js start
+CMD node ./app/web-app-1/standalone/apps/web-app-1/server.js
+
+FROM builder AS deploy-app-002
+
+ARG CACHEBUST=1
+ENV NODE_ENV production
+WORKDIR /app
+
+COPY --from=builder /app/dist/apps/web-app-2/.next/standalone ./app/web-app-2/standalone
+
+COPY --from=builder /app/dist/apps/web-app-2/.next/static ./app/web-app-2/standalone/dist/apps/web-app-2/.next/static
+
+COPY --from=builder /app/dist/apps/web-app-2/public ./app/web-app-2/standalone/dist/apps/public
+
+CMD node ./app/web-app-2/standalone/apps/web-app-2/server.js
