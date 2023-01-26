@@ -1,4 +1,14 @@
 import styles from './index.module.css';
+import Link from 'next/link';
+/**
+DO NOT REMOVE START
+ */
+//needed for standalone to work
+import path from 'path';
+path.resolve('./next.config.js');
+/**
+DO NOT REMOVE END
+ */
 
 export function Index() {
   /*
@@ -15,6 +25,13 @@ export function Index() {
               <span> Hello there, </span>
               Welcome web-app-2 👋
             </h1>
+
+            <Link href="/pic">Test image</Link>
+
+            <p>Domain: {process.env.NX_DOMAIN_NAME}</p>
+            <p>Domain 2: {process.env.NEXT_PUBLIC_DEPLOY_URL}</p>
+
+            <p suppressHydrationWarning={true}>Domain: {process.env.TEST}</p>
           </div>
 
           <div id="hero" className="rounded">

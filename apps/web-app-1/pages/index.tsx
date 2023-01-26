@@ -1,4 +1,15 @@
 import styles from './index.module.css';
+import Link from 'next/link';
+
+/**
+DO NOT REMOVE START
+ */
+//needed for standalone to work
+import path from 'path';
+path.resolve('./next.config.js');
+/**
+DO NOT REMOVE END
+ */
 
 export function Index() {
   /*
@@ -15,6 +26,8 @@ export function Index() {
               <span> Hello there, </span>
               Welcome web-app-1 👋
             </h1>
+
+            <Link href="/pic">Test image</Link>
           </div>
 
           <div id="hero" className="rounded">
